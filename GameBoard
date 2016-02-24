@@ -1,5 +1,31 @@
 package gameboard;
 
+public class GameEntry {
+	private String name;
+	private int score;
+	
+	public GameEntry(String name, int score){
+		this.name = name;
+		this.score = score;
+	}
+	
+	public String getName (){
+		return name;
+	}
+	
+	public int getScore(){
+		return score;
+	}
+	
+	public String toString(){
+		return "("+name+", "+score+")";
+	}
+}
+
+
+------------------------------------------------------------------
+package gameboard;
+
 public class GameBoard {
 	private GameEntry[] myBoardArray; // array of references(remote controls) to GameEntry objects
 	private int numOfEntry = 0;
