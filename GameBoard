@@ -1,0 +1,50 @@
+package gameboard;
+
+public class GameBoard {
+	private GameEntry[] myBoardArray; // array of references(remote controls) to GameEntry objects
+	private int numOfEntry = 0;
+	
+	/*constructor will be responsible for deciding the capacity of the board*/
+	public GameBoard( int capacity){
+		myBoardArray = new GameEntry [capacity];
+	}
+	
+	public boolean isEmpty(){
+		if (numOfEntry == 0)
+			return true;
+		else 
+			return false;
+	}
+	
+	public void addEntry(GameEntry e){
+		int newScore = e.getScore();
+		/*no need to check if the element is the first one to be added*/
+/*		if (isEmpty()){
+			myBoardArray[0] = e;
+			numOfEntry++;
+		}else{ // if it's not the first element*/
+			if (numOfEntry < myBoardArray.length || newScore > myBoardArray[numOfEntry-1].getScore()){
+				if (numOfEntry < myBoardArray.length){
+					numOfEntry ++; //since numOfEntry is incremented first later will be decremented and will be assigned to j
+				}else{ // the case where more elements than capacity will be added 
+					numOfEntry = myBoardArray.length; // then the numOfEntry will remain as the array's capacity
+				}
+				/*comparison from the last inserted entry*/
+				int j = numOfEntry -1;
+				while (j > 0 && myBoardArray[j-1].getScore() < newScore){
+					myBoardArray [j] = myBoardArray [j-1];
+					j--;
+				}
+				myBoardArray[j] = e;// first element inserted will jump over while loop and  execute this because of j will be equal to 0
+			}
+		}
+//	}
+	
+	public void display(){
+		for (int i= 0; i<numOfEntry; i++){
+			System.out.println(myBoardArray[i].getName() +":"+ myBoardArray[i].getScore());
+		}
+	}
+	
+	
+}
