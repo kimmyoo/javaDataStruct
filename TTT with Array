@@ -62,7 +62,8 @@ public class GameBoard {
 			System.out.println(piece + " has won!");
 			return true;
 		}else {
-			return false;}
+			return false;
+		}
 	}
 	
 	public void displayBoard(){
