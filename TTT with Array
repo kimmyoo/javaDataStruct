@@ -1,0 +1,110 @@
+package tictactoe;
+import java.util.Scanner;
+
+public class Player {
+	private String name;
+	private char piece;
+	
+	public Player(String name, char piece){
+		this.name = name;
+		this.piece = piece;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	
+	public char getPiece(){
+		return piece;
+	}
+	
+	public int getInput(){
+		System.out.println(name + "'s turn to put piece");
+		Scanner reader = new Scanner(System.in); //?????
+		int position = reader.nextInt();
+		return position;
+	}
+
+}
+_________________________________________________________
+package tictactoe;
+
+public class GameBoard {
+
+	protected char [] board = {'1','2','3', 
+					 '4','5','6', 
+					 '7','8','9'};
+	
+	private int numOfRounds = 0;
+	
+	public int getRounds(){
+		return numOfRounds;
+	}
+	
+	public void increRounds(){
+		numOfRounds++;
+	}
+	public void changeBoard(int index, char piece){
+		board[index-1] = piece;
+	}
+	
+	public boolean checkWon(char piece){
+		if ((piece == board[0] && piece == board[1] && piece == board[2]) ||
+				(piece == board[3] && piece == board[4] && piece == board[5])||
+				(piece == board[6] && piece == board[7] && piece == board[8])||
+				(piece == board[0] && piece == board[3] && piece == board[6])||
+				(piece == board[1] && piece == board[4] && piece == board[7])||
+				(piece == board[2] && piece == board[5] && piece == board[8])||
+				(piece == board[0] && piece == board[4] && piece == board[8])||
+				(piece == board[2] && piece == board[4] && piece == board[6])
+				){
+			System.out.println(piece + " has won!");
+			return true;
+		}else {
+			return false;}
+	}
+	
+	public void displayBoard(){
+		System.out.println(board[0]+ "  " + board[1] + "  " + board[2]);
+		System.out.println(board[3]+ "  " + board[4] + "  " + board[5]);
+		System.out.println(board[6]+ "  " + board[7] + "  " + board[8]);
+	}
+	
+
+}
+__________________________________________________________
+package tictactoe;
+
+public class PlaySomeGame {
+	public static void main (String [] args){
+		GameBoard ticTacToe = new GameBoard();
+		Player player1 = new Player("yao", 'x');
+		Player player2 = new Player("lin", 'o');
+		
+		System.out.println("this is tic tac toe");
+		while (ticTacToe.checkWon(player1.getPiece()) == false && ticTacToe.checkWon(player2.getPiece()) == false){
+			ticTacToe.displayBoard();
+			
+			int input1 = player1.getInput();
+			ticTacToe.changeBoard(input1, player1.getPiece());
+			ticTacToe.increRounds();
+			
+			ticTacToe.displayBoard();
+			
+			if (ticTacToe.checkWon(player1.getPiece())==true){
+				break;
+				}
+			/*checking of a tie needs to be after the first player - _ -*/
+			if (ticTacToe.getRounds()== 9){
+				System.out.println("it's a tie - _ -");
+				break;
+			}
+		
+			int input2 = player2.getInput();
+			ticTacToe.increRounds();
+			ticTacToe.changeBoard(input2, player2.getPiece());
+		}
+	}
+
+}
