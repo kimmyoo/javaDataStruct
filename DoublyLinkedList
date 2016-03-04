@@ -1,0 +1,175 @@
+package doublyLinkedList;
+
+public class DNode {
+	private String name;
+	private DNode prev;
+	private DNode next;
+	
+	/*constructors*/
+	public DNode (DNode prev, String name, DNode next){
+		this.name = name;
+		this.prev = prev;
+		this.next = next;
+	}
+	public DNode (){
+		
+	}
+	
+	/*getters*/
+	public String getContent(){
+		return name;
+	}
+	public DNode getPrev(){
+		return prev;
+	}
+	public DNode getNext(){
+		return next;
+	}
+	
+	/*setters*/
+	public void setPrev(DNode prev){
+		this.prev = prev;
+	}
+	public void setNext(DNode next){
+		this.next = next;
+	}
+}
+-----------------------------------------------
+
+package doublyLinkedList;
+
+public class DLinkedList {
+	private DNode header;
+	private DNode trailer;
+	private int size; 
+	
+	/*constructors*/
+	public DLinkedList(){
+		header = new DNode (null, null, null);
+		trailer = new DNode (null, null, null);
+		header.setNext(trailer);
+		trailer.setPrev(header);
+		size = 0;
+	}
+	
+	public boolean isEmpty(){
+		if (size == 0)
+			return true;
+		return false;
+	}
+	
+	/*getters*/
+	public DNode getHeader(){
+		return header;
+	}
+	public DNode getTrailer(){
+		return trailer;
+	}
+	public String getFirst(){
+		if (isEmpty()){
+			return null;
+		}
+		return header.getNext().getContent();
+	}
+	 
+	 public String getLast(){
+		 if (isEmpty()){
+			 return null;
+		 }
+		 return trailer.getPrev().getContent();
+	 }
+	 
+	 
+	 
+	 /*learn to appreciate the simpleness */
+	 public void insertBetween (String newName, DNode predecessor, DNode successor){
+		 DNode newest = new DNode (predecessor, newName, successor); // create a new Node to contain newName and it's connected between prev and next. 
+		 /*向中间连接*/
+		 predecessor.setNext(newest);
+		 successor.setPrev(newest);
+		 size ++; 
+	 }
+	 
+	 /*compare the two ways of doing insertion below, and learn to appreciate the conciseness of code*/
+	 public void insertFirst(String newName){
+			 DNode newest = new DNode(null, newName, null);
+			 newest.setNext(header.getNext());
+			 newest.setPrev(header);
+			 
+			 header.getNext().setPrev(newest);
+			 header.setNext(newest);
+			 size ++;
+	 }
+	 
+	 public void insertLast (String newName){
+		 insertBetween(newName, trailer.getPrev(), trailer); // insert between the trailer and the second to trailer node
+	 }
+	 
+	 
+	 public String removeDeadNode(DNode dead){
+		 if (isEmpty()){
+			 return null;
+		 } // this is not in book's code. 
+		 
+		 /* need to two more variable references to hold the dead node's prev and next*/
+		 DNode predecessor = dead.getPrev(); 
+		 DNode successor = dead.getNext(); 
+		 
+		 /*跳跃连接  jumps over dead node*/
+		 predecessor.setNext(successor); //dead.getPrev().setNext(dead.getNext());
+		 successor.setPrev(predecessor); //
+		 size --;
+		 return dead.getContent();
+	 }
+	 
+	
+	public String removeFirst(){
+		return removeDeadNode (header.getNext());
+	}
+	
+	public String removeLast(){
+		return removeDeadNode (trailer.getPrev());
+	}
+
+	/*at first the display method changed the header caused the bug, the way to solve it is to store the original header 
+	 * in a reference variable call oldHeader after walking through the list and print out the element, 
+	 * don't forget to assign the oldHeader back to header*/
+	public void displayList(){
+		if (isEmpty()){
+			System.out.println("the List is empty, nothing to display");
+		} else {
+			DNode oldHeader = header;
+			while (header.getNext() != trailer){
+				System.out.println(header.getNext().getContent());
+				header = header.getNext();
+			}
+			header = oldHeader;
+		}
+		System.out.println("size of the list: " + size);
+		System.out.println("---------------------------");
+	}
+	
+	/*from this practice, I learned that always start from a general case. 
+	 * other particular cases could be solved by a general case formula*/
+	
+}
+
+-------------------------------------------------------
+
+package doublyLinkedList;
+
+public class TestOfDoublyLinkedList {
+	public static void main (String [] args){
+		DLinkedList dList1 = new DLinkedList(); // a new list with only a header and trailer
+		dList1.displayList();
+		dList1.insertFirst("yao");
+		dList1.insertLast("lynn");
+		dList1.insertBetween("doudou", dList1.getHeader().getNext(), dList1.getTrailer().getPrev());
+		dList1.displayList();
+		
+		dList1.removeDeadNode(dList1.getHeader().getNext().getNext());
+		dList1.displayList();
+
+	}
+}
+
