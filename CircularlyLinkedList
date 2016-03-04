@@ -1,0 +1,133 @@
+package circularlinkedlist;
+
+public class RegListNode {
+	private String name;
+	private RegListNode next;
+	
+	/*constructors*/
+	public RegListNode(String name, RegListNode next){
+		this.name = name;
+		this.next = next;
+	}
+	
+	/*getters*/
+	public String getContent(){
+		return name;
+	}
+	
+	public RegListNode getNext(){
+		return next;
+	}
+	
+	
+	/*setters*/
+	public void setNext(RegListNode nextNode){
+		next = nextNode;
+	}
+}
+----------------------------------------------------------------
+
+package circularlinkedlist;
+
+/*optimized circularly linked list without head*/
+public class CircularLinkedList {
+	private RegListNode tail = null;
+	private int size = 0;
+	
+	/*constructor*/
+	public CircularLinkedList(){
+		
+	}
+	
+	/*getters*/
+	public int getSize(){
+		return size;
+	}
+	
+	public boolean isEmpty(){
+		return size == 0;  // a simple way rather than if else
+	}
+	
+	public String getLastContent(){
+		if (isEmpty())
+			return null;
+		
+		return tail.getContent();
+	}
+		
+	public String getFirstContent(){
+		if (isEmpty())
+			return null;
+		return tail.getNext().getContent();
+	}
+	
+	/*update methods: don't forget to update size*/
+	public void insertFirst(String newName){
+		if (isEmpty()){
+			tail = new RegListNode(newName, null);
+			tail.setNext(tail); // here cannot use getNext() = tail; because tail.next is null
+		} else {
+			RegListNode newest = new RegListNode (newName, null);
+			newest.setNext(tail.getNext()); //connects to the present "head"
+			tail.setNext(newest); // now the newest becomes the "head"
+		}
+		size ++;
+	}
+	
+	public void insertLast(String newName){
+		insertFirst(newName); // insert at beginning then
+		tail = tail.getNext(); // then the newly inserted head becomes the tail
+	}
+	
+	public void rotate(){
+		if(!isEmpty()){
+			tail = tail.getNext();
+		}
+	}
+	
+	public String removeFirst(){
+		if (isEmpty()){
+			return null;
+		}
+		
+		RegListNode deadHead = tail.getNext(); //variable deadHead to save our node to be removed
+		if (deadHead == tail){
+			tail = null;
+		}else{
+			tail.setNext(deadHead.getNext());  // connects to the next node of "deadHead"
+		}
+		size --;
+		return deadHead.getContent();
+	
+	}
+	
+	public void printHead(){
+		System.out.println(tail.getNext().getContent());
+	}
+	/*
+	 * like the singly linked List removeLast() is time consuming 
+	 * you cannot go back from tail to the previous node because node is singly linked.
+	 * */
+	
+}
+----------------------------------------------------------------------------------
+
+package circularlinkedlist;
+
+public class TestOfCircLinkedList {
+	public static void main (String [] args){
+		CircularLinkedList circList1 = new CircularLinkedList ();
+		circList1.insertFirst("yao");
+		circList1.insertFirst("lynn");
+		circList1.insertLast("doudou");
+		
+		for (int i = 0; i< 3; i++){
+			circList1.printHead();
+			circList1.rotate();
+		}
+		
+		circList1.removeFirst();
+		circList1.rotate();
+		circList1.printHead();
+	}
+}
